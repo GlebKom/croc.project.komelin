@@ -14,19 +14,18 @@ public class Photo {
     @Column(name = "name")
     private String name;
 
-    @Column(name = "link")
-    private String hash;
+
+    @ManyToOne
+    @JoinColumn(name = "link_id", referencedColumnName = "id")
+    private Link link;
 
     public Photo(){}
 
-    public Photo(String name, String link) {
+    public Photo(String name, Link link) {
         this.name = name;
-        this.hash = link;
+        this.link = link;
     }
 
-    public Photo(String link) {
-        this.hash = link;
-    }
     public long getId() {
         return id;
     }
@@ -35,19 +34,19 @@ public class Photo {
         this.id = id;
     }
 
-    public String getHash() {
-        return hash;
-    }
-
-    public void setHash(String link) {
-        this.hash = link;
-    }
-
     public String getName() {
         return name;
     }
 
     public void setName(String name) {
         this.name = name;
+    }
+
+    public Link getLink() {
+        return link;
+    }
+
+    public void setLink(Link link) {
+        this.link = link;
     }
 }

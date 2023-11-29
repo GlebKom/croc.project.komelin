@@ -18,6 +18,10 @@ import java.io.*;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import java.util.concurrent.ExecutionException;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
+import java.util.concurrent.Future;
 
 @Service
 public class PhotoStorageService implements StorageService {
@@ -66,7 +70,7 @@ public class PhotoStorageService implements StorageService {
     }
 
     @Override
-    public Object downloadFile(String fileName) throws FileDownloadException, IOException {
+    public Resource downloadFile(String fileName) throws FileDownloadException, IOException {
         if (bucketIsEmpty()) {
             throw new FileDownloadException("Requested bucket does not exist or is empty");
         }
@@ -79,6 +83,32 @@ public class PhotoStorageService implements StorageService {
                 throw new FileDownloadException("Could not find the file!");
             }
         }
+    }
+
+    @Override
+    public List<InputStream> downloadFiles(List<String> fileNames) throws FileDownloadException, IOException {
+        if (bucketIsEmpty()) {
+            throw new FileDownloadException("Requested bucket does not exist or is empty");
+        }
+
+        List<InputStream> downloadedFilesInputStreams = new ArrayList<>();
+        ExecutorService pool = Executors.newFixedThreadPool(10);
+        List<Future<Resource>> fileFutures = new ArrayList<>();
+
+        for (String file : fileNames) {
+            fileFutures.add(pool.submit(() -> downloadFile(file)));
+        }
+
+        fileFutures.forEach(fileFuture -> {
+            try {
+                downloadedFilesInputStreams.add(fileFuture.get().getInputStream());
+            } catch (InterruptedException | ExecutionException | IOException e) {
+                throw new RuntimeException(e);
+            }
+        });
+
+        return downloadedFilesInputStreams;
+
     }
 
     private String generateFileName(MultipartFile multiPart) {

@@ -10,6 +10,8 @@ import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.context.request.WebRequest;
 import org.springframework.web.multipart.MultipartException;
 import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExceptionHandler;
+import ru.komelin.crocprojectkomelin.exception.repository.DownloadDateExceededException;
+import ru.komelin.crocprojectkomelin.exception.repository.DownloadLimitExceededException;
 import ru.komelin.crocprojectkomelin.exception.repository.PhotoNotFoundException;
 import ru.komelin.crocprojectkomelin.exception.storage.FileDownloadException;
 import ru.komelin.crocprojectkomelin.exception.storage.FileEmptyException;
@@ -31,6 +33,30 @@ public class SpringBootFileUploadExceptionHandler extends ResponseEntityExceptio
                 bodyOfResponse,
                 new HttpHeaders(),
                 HttpStatus.NOT_FOUND,
+                request);
+    }
+
+    @ExceptionHandler(value = DownloadLimitExceededException.class)
+    protected ResponseEntity<Object> handleDownloadLimitExceededException(DownloadLimitExceededException ex,
+                                                                          WebRequest request) {
+
+        String bodyOfResponse = ex.getMessage();
+        return handleExceptionInternal(ex,
+                bodyOfResponse,
+                new HttpHeaders(),
+                HttpStatus.BAD_REQUEST,
+                request);
+    }
+
+    @ExceptionHandler(value = DownloadDateExceededException.class)
+    protected ResponseEntity<Object> handleDownloadDateExceededException(DownloadDateExceededException ex,
+                                                                          WebRequest request) {
+
+        String bodyOfResponse = ex.getMessage();
+        return handleExceptionInternal(ex,
+                bodyOfResponse,
+                new HttpHeaders(),
+                HttpStatus.BAD_REQUEST,
                 request);
     }
 
