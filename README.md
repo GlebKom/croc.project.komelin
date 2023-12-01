@@ -23,7 +23,8 @@ seconds_of_life(сколько секунд будет жить ссылка), r
 
 Хорошего Вам дня и благослови меня господь от багов и непредвиденных моментов. 
 
-https://camo.githubusercontent.com/235b9b848171fc04cbcf106c86a25f71ab8ee05e1814af3189183d865cf4ffc0/68747470733a2f2f687474702e6361742f323034
+![102](https://github.com/GlebKom/croc.project.komelin/assets/113019811/b2edcdc8-1872-4204-861f-055c9eb4e6ff)
+
 
 
    
