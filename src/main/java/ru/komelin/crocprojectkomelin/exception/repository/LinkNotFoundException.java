@@ -1,7 +1,7 @@
 package ru.komelin.crocprojectkomelin.exception.repository;
 
 public class LinkNotFoundException extends Exception{
-    private String link;
+    private final String link;
 
     public LinkNotFoundException(String link) {
         this.link = link;
@@ -9,6 +9,6 @@ public class LinkNotFoundException extends Exception{
 
     @Override
     public String getMessage() {
-        return "Link  " + link + " not found";
+        return "Link '" + link + "' not found";
     }
 }

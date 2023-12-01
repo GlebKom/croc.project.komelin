@@ -15,15 +15,13 @@ import java.time.LocalDateTime;
 @Service
 public class LinkServiceImpl implements LinkService{
 
-    private final PhotoService photoService;
     private final UniqueNumberDao uniqueNumberDao;
     private final HashService hashService;
     private final LinkRepository linkRepository;
 
     private final RateLimitService rateLimitService;
 
-    public LinkServiceImpl(PhotoServiceImpl photoService, UniqueNumberDao uniqueNumberDao, HashServiceImpl hashService, LinkRepository linkRepository, RateLimitService rateLimitService) {
-        this.photoService = photoService;
+    public LinkServiceImpl(UniqueNumberDao uniqueNumberDao, HashServiceImpl hashService, LinkRepository linkRepository, RateLimitService rateLimitService) {
         this.uniqueNumberDao = uniqueNumberDao;
         this.hashService = hashService;
         this.linkRepository = linkRepository;
@@ -43,14 +41,14 @@ public class LinkServiceImpl implements LinkService{
         }
 
         if (link.getLifetime().isBefore(LocalDateTime.now())) {
-            throw new DownloadDateExceededException("This link is already exceeded");
+            throw new DownloadDateExceededException("This link '" + link.getLinkAddress() + "' is already exceeded");
         }
 
         if (link.getDownloadLimit() > 0) {
             link.setDownloadLimit(link.getDownloadLimit() - 1);
             linkRepository.save(link);
         } else {
-            throw new DownloadLimitExceededException("Download limit by this link is exceeded");
+            throw new DownloadLimitExceededException("Download limit by this link '" + link.getLinkAddress() + "' is exceeded");
         }
 
         if (link.getLifetime().isAfter(LocalDateTime.now())) {
