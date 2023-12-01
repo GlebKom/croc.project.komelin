@@ -58,10 +58,8 @@ public class PhotoController {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Invalid parameters");
         }
 
-        List<String> fileNames;
-        Link link;
-        fileNames = storageService.uploadFiles(multipartFiles);
-        link = linkService.createLink(downloadLimit, LocalDateTime.now().plusSeconds(secondsOfLife), requestsPerSecond);
+        List<String> fileNames = storageService.uploadFiles(multipartFiles);
+        Link link = linkService.createLink(downloadLimit, LocalDateTime.now().plusSeconds(secondsOfLife), requestsPerSecond);
         photoService.savePhotos(fileNames, link);
 
         return ResponseEntity.ok().body(link.getLinkAddress());
