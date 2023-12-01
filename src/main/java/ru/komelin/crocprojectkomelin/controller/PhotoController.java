@@ -17,10 +17,7 @@ import ru.komelin.crocprojectkomelin.exception.storage.FileEmptyException;
 import ru.komelin.crocprojectkomelin.exception.storage.FileUploadException;
 import ru.komelin.crocprojectkomelin.model.Link;
 import ru.komelin.crocprojectkomelin.model.Photo;
-import ru.komelin.crocprojectkomelin.service.LinkService;
-import ru.komelin.crocprojectkomelin.service.PhotoService;
-import ru.komelin.crocprojectkomelin.service.RateLimitService;
-import ru.komelin.crocprojectkomelin.service.StorageService;
+import ru.komelin.crocprojectkomelin.service.*;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -40,7 +37,7 @@ public class PhotoController {
     private final RateLimitService rateLimitService;
 
     @Autowired
-    public PhotoController(StorageService storageService, PhotoService photoService, LinkService linkService, RateLimitService rateLimitService) {
+    public PhotoController(StorageService storageService, PhotoServiceImpl photoService, LinkServiceImpl linkService, RateLimitServiceImpl rateLimitService) {
         this.storageService = storageService;
         this.photoService = photoService;
         this.linkService = linkService;

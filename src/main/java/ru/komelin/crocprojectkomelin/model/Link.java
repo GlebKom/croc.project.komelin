@@ -2,7 +2,6 @@ package ru.komelin.crocprojectkomelin.model;
 
 
 import jakarta.persistence.*;
-import jakarta.validation.constraints.Max;
 import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotNull;
 
