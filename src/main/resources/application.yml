@@ -5,12 +5,7 @@ cloud:
       secret-key: YCOxa5vGW9uSX1sdJSsUj6ucavUR3TCib7hALMBE
     region:
       static: ru-central1
-    stack:
-      auto: false
 
 application:
   bucket:
     name: komelin.photo.saver.storage
-
-server:
-  port: 8080

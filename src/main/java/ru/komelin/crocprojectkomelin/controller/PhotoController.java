@@ -8,8 +8,10 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.mvc.method.annotation.StreamingResponseBody;
-import ru.komelin.crocprojectkomelin.exception.repository.DownloadDateExceededException;
-import ru.komelin.crocprojectkomelin.exception.repository.DownloadLimitExceededException;
+import ru.komelin.crocprojectkomelin.exception.repository.LinkNotFoundException;
+import ru.komelin.crocprojectkomelin.exception.request.DownloadDateExceededException;
+import ru.komelin.crocprojectkomelin.exception.request.DownloadLimitExceededException;
+import ru.komelin.crocprojectkomelin.exception.request.RequestPerSecondExceededException;
 import ru.komelin.crocprojectkomelin.exception.storage.FileDownloadException;
 import ru.komelin.crocprojectkomelin.exception.storage.FileEmptyException;
 import ru.komelin.crocprojectkomelin.exception.storage.FileUploadException;
@@ -52,7 +54,7 @@ public class PhotoController {
                                          @RequestParam("requests_per_second") int requestsPerSecond) throws FileEmptyException,
             IOException, FileUploadException {
 
-        if (requestsPerSecond <= 0 || secondsOfLife < 0 || downloadLimit < 0) {
+        if (requestsPerSecond <= 0 || secondsOfLife <= 0 || downloadLimit <= 0) {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Invalid parameters");
         }
 
@@ -67,12 +69,13 @@ public class PhotoController {
 
     @GetMapping("/{hash}")
     public ResponseEntity<StreamingResponseBody> getPhotos(@PathVariable("hash") String hash) throws FileDownloadException,
-            DownloadLimitExceededException, DownloadDateExceededException {
+            DownloadLimitExceededException, DownloadDateExceededException, RequestPerSecondExceededException,
+            LinkNotFoundException {
 
         Link link = linkService.getLinkByAddress(hash);
 
         if (!rateLimitService.isAccessGained(link)) {
-            return ResponseEntity.status(HttpStatus.TOO_MANY_REQUESTS).build();
+            throw new RequestPerSecondExceededException("Too many requests");
         }
 
         List<String> fileNames = link.getPhotos().stream().map(Photo::getName).toList();
@@ -80,6 +83,7 @@ public class PhotoController {
         if (fileNames.isEmpty()) {
             throw new FileDownloadException("Link is invalid");
         }
+
         return ResponseEntity
                 .ok()
                 .header(HttpHeaders.CONTENT_DISPOSITION, "attachment = Result_files.zip")

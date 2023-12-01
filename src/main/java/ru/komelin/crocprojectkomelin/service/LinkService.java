@@ -1,11 +1,10 @@
 package ru.komelin.crocprojectkomelin.service;
 
-import jakarta.persistence.EntityManager;
-import jakarta.persistence.EntityManagerFactory;
 import org.springframework.stereotype.Service;
 import ru.komelin.crocprojectkomelin.dao.UniqueNumberDao;
-import ru.komelin.crocprojectkomelin.exception.repository.DownloadDateExceededException;
-import ru.komelin.crocprojectkomelin.exception.repository.DownloadLimitExceededException;
+import ru.komelin.crocprojectkomelin.exception.repository.LinkNotFoundException;
+import ru.komelin.crocprojectkomelin.exception.request.DownloadDateExceededException;
+import ru.komelin.crocprojectkomelin.exception.request.DownloadLimitExceededException;
 import ru.komelin.crocprojectkomelin.model.Link;
 import ru.komelin.crocprojectkomelin.repository.LinkRepository;
 
@@ -26,10 +25,11 @@ public class LinkService {
         this.linkRepository = linkRepository;
     }
 
-    public Link getLinkByAddress(String address) throws DownloadLimitExceededException, DownloadDateExceededException {
+    public Link getLinkByAddress(String address) throws DownloadLimitExceededException, DownloadDateExceededException,
+            LinkNotFoundException {
         Link link = linkRepository.findByLinkAddress(address);
         if (link == null) {
-            return null;
+            throw new LinkNotFoundException(address);
         }
 
         if (link.getLifetime().isBefore(LocalDateTime.now())) {

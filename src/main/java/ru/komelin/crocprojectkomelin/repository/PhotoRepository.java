@@ -1,12 +1,11 @@
 package ru.komelin.crocprojectkomelin.repository;
 
-import org.springframework.data.repository.CrudRepository;
-import org.springframework.stereotype.Repository;
+import org.springframework.data.jpa.repository.JpaRepository;
 import ru.komelin.crocprojectkomelin.model.Link;
 import ru.komelin.crocprojectkomelin.model.Photo;
 
 import java.util.List;
 
-public interface PhotoRepository extends CrudRepository<Photo, Long> {
+public interface PhotoRepository extends JpaRepository<Photo, Long> {
     List<Photo> findAllByLink(Link link);
 }

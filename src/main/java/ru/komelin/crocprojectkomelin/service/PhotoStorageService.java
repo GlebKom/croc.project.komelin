@@ -69,11 +69,7 @@ public class PhotoStorageService implements StorageService {
         return fileNames;
     }
 
-    @Override
-    public Resource downloadFile(String fileName) throws FileDownloadException, IOException {
-        if (bucketIsEmpty()) {
-            throw new FileDownloadException("Requested bucket does not exist or is empty");
-        }
+    private Resource downloadFile(String fileName) throws FileDownloadException, IOException {
         S3Object object = s3Client.getObject(bucketName, fileName);
         try (S3ObjectInputStream s3is = object.getObjectContent()) {
             Resource resource = new InputStreamResource(new ByteArrayInputStream(s3is.readAllBytes()));
@@ -86,7 +82,7 @@ public class PhotoStorageService implements StorageService {
     }
 
     @Override
-    public List<InputStream> downloadFiles(List<String> fileNames) throws FileDownloadException, IOException {
+    public List<InputStream> downloadFiles(List<String> fileNames) throws FileDownloadException {
         if (bucketIsEmpty()) {
             throw new FileDownloadException("Requested bucket does not exist or is empty");
         }

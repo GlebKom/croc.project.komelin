@@ -1,5 +1,6 @@
 package ru.komelin.crocprojectkomelin.dao;
 
+import jakarta.annotation.PostConstruct;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Component;
@@ -16,6 +17,11 @@ public class UniqueNumberDao {
     @Autowired
     public UniqueNumberDao(JdbcTemplate jdbcTemplate) {
         this.jdbcTemplate = jdbcTemplate;
+    }
+
+    @PostConstruct
+    private void init() {
+        jdbcTemplate.execute("CREATE SEQUENCE IF NOT EXISTS unique_number");
     }
 
     public BigDecimal getUniqueNumber() {

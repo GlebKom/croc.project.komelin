@@ -14,9 +14,6 @@ import java.util.List;
 public interface StorageService {
 
     List<String> uploadFiles(MultipartFile[] multipartFiles) throws FileUploadException, IOException, FileEmptyException;
-
-    Resource downloadFile(String fileName) throws FileDownloadException, IOException;
-
     List<InputStream> downloadFiles(List<String> fileNames) throws FileDownloadException, IOException;
 
 }

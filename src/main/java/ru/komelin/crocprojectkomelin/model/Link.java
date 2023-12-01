@@ -2,6 +2,9 @@ package ru.komelin.crocprojectkomelin.model;
 
 
 import jakarta.persistence.*;
+import jakarta.validation.constraints.Max;
+import jakarta.validation.constraints.Min;
+import jakarta.validation.constraints.NotNull;
 
 import java.time.LocalDateTime;
 import java.util.List;
@@ -14,19 +17,22 @@ public class Link {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
 
+    @NotNull
     @Column(name = "link_address")
     private String linkAddress;
 
+    @Min(0)
     @Column(name = "download_limit")
     private int downloadLimit;
 
     @Column(name = "lifetime")
     private LocalDateTime lifetime;
 
+    @Min(1)
     @Column(name = "request_per_second")
     private int requestPerSecond;
 
-    @OneToMany(mappedBy = "link")
+    @OneToMany(mappedBy = "link", cascade = CascadeType.ALL)
     private List<Photo> photos;
 
     public Link() {

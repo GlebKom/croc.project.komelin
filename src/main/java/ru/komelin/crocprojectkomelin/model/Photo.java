@@ -1,6 +1,8 @@
 package ru.komelin.crocprojectkomelin.model;
 
 import jakarta.persistence.*;
+import jakarta.validation.constraints.NotNull;
+import org.hibernate.annotations.Cascade;
 
 @Entity
 @Table(name = "photo")
@@ -11,12 +13,14 @@ public class Photo {
     @Column(name = "id")
     private long id;
 
+    @NotNull
     @Column(name = "name")
     private String name;
 
 
     @ManyToOne
     @JoinColumn(name = "link_id", referencedColumnName = "id")
+    @Cascade(value = org.hibernate.annotations.CascadeType.ALL)
     private Link link;
 
     public Photo(){}
