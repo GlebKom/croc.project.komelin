@@ -11,7 +11,7 @@
 	<groupId>ru.komelin</groupId>
 	<artifactId>croc-project-komelin</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
-	<packaging>war</packaging>
+	<packaging>jar</packaging>
 	<name>croc.project.komelin</name>
 	<description>croc.project.komelin</description>
 	<properties>
