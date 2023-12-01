@@ -20,7 +20,7 @@ public class RequestExceptionHandler extends RepositoryExceptionHandler{
         return handleExceptionInternal(ex,
                 bodyOfResponse,
                 new HttpHeaders(),
-                HttpStatus.BAD_REQUEST,
+                HttpStatus.GONE,
                 request);
     }
 
@@ -32,7 +32,7 @@ public class RequestExceptionHandler extends RepositoryExceptionHandler{
         return handleExceptionInternal(ex,
                 bodyOfResponse,
                 new HttpHeaders(),
-                HttpStatus.BAD_REQUEST,
+                HttpStatus.GONE,
                 request);
     }
 

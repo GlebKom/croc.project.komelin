@@ -6,6 +6,7 @@ import ru.komelin.crocprojectkomelin.dao.UniqueNumberDao;
 import ru.komelin.crocprojectkomelin.exception.repository.LinkNotFoundException;
 import ru.komelin.crocprojectkomelin.exception.request.DownloadDateExceededException;
 import ru.komelin.crocprojectkomelin.exception.request.DownloadLimitExceededException;
+import ru.komelin.crocprojectkomelin.exception.request.RequestPerSecondExceededException;
 import ru.komelin.crocprojectkomelin.model.Link;
 import ru.komelin.crocprojectkomelin.repository.LinkRepository;
 
@@ -19,19 +20,26 @@ public class LinkServiceImpl implements LinkService{
     private final HashService hashService;
     private final LinkRepository linkRepository;
 
-    public LinkServiceImpl(PhotoServiceImpl photoService, UniqueNumberDao uniqueNumberDao, HashServiceImpl hashService, LinkRepository linkRepository) {
+    private final RateLimitService rateLimitService;
+
+    public LinkServiceImpl(PhotoServiceImpl photoService, UniqueNumberDao uniqueNumberDao, HashServiceImpl hashService, LinkRepository linkRepository, RateLimitService rateLimitService) {
         this.photoService = photoService;
         this.uniqueNumberDao = uniqueNumberDao;
         this.hashService = hashService;
         this.linkRepository = linkRepository;
+        this.rateLimitService = rateLimitService;
     }
 
     @Transactional
     public Link getLinkByAddress(String address) throws DownloadLimitExceededException, DownloadDateExceededException,
-            LinkNotFoundException {
+            LinkNotFoundException, RequestPerSecondExceededException {
         Link link = linkRepository.findByLinkAddress(address);
         if (link == null) {
             throw new LinkNotFoundException(address);
+        }
+
+        if (!rateLimitService.isAccessGained(link)) {
+            throw new RequestPerSecondExceededException("Too many requests");
         }
 
         if (link.getLifetime().isBefore(LocalDateTime.now())) {

@@ -8,8 +8,6 @@ import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.context.request.WebRequest;
 import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExceptionHandler;
 import ru.komelin.crocprojectkomelin.exception.repository.LinkNotFoundException;
-import ru.komelin.crocprojectkomelin.exception.request.DownloadDateExceededException;
-import ru.komelin.crocprojectkomelin.exception.request.DownloadLimitExceededException;
 
 @ControllerAdvice
 public class RepositoryExceptionHandler extends ResponseEntityExceptionHandler {

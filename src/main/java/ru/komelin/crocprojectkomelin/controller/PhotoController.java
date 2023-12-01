@@ -69,10 +69,6 @@ public class PhotoController {
 
         Link link = linkService.getLinkByAddress(hash);
 
-        if (!rateLimitService.isAccessGained(link)) {
-            throw new RequestPerSecondExceededException("Too many requests");
-        }
-
         List<String> fileNames = link.getPhotos().stream().map(Photo::getName).toList();
 
         if (fileNames.isEmpty()) {

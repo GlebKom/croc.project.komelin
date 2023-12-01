@@ -15,6 +15,7 @@ import ru.komelin.crocprojectkomelin.exception.request.DownloadLimitExceededExce
 import ru.komelin.crocprojectkomelin.exception.repository.LinkNotFoundException;
 import ru.komelin.crocprojectkomelin.exception.storage.FileDownloadException;
 import ru.komelin.crocprojectkomelin.exception.storage.FileEmptyException;
+import ru.komelin.crocprojectkomelin.exception.storage.FileUploadException;
 import ru.komelin.crocprojectkomelin.exception.storage.SpringBootStorageException;
 
 import java.io.FileNotFoundException;
@@ -29,7 +30,7 @@ public class StorageExceptionHandler extends ResponseEntityExceptionHandler {
         return handleExceptionInternal(ex,
                 bodyOfResponse,
                 new HttpHeaders(),
-                HttpStatus.BAD_REQUEST,
+                HttpStatus.UNSUPPORTED_MEDIA_TYPE,
                 request);
     }
 
@@ -40,12 +41,23 @@ public class StorageExceptionHandler extends ResponseEntityExceptionHandler {
         return handleExceptionInternal(ex,
                 bodyOfResponse,
                 new HttpHeaders(),
-                HttpStatus.NOT_FOUND,
+                HttpStatus.GONE,
                 request);
     }
 
-    @ExceptionHandler(value
-            = { SpringBootStorageException.class})
+    @ExceptionHandler(value = FileUploadException.class)
+    protected ResponseEntity<Object> handleFileUploadException(FileUploadException ex,
+                                                               WebRequest request) {
+
+        String bodyOfResponse = ex.getMessage();
+        return handleExceptionInternal(ex,
+                bodyOfResponse,
+                new HttpHeaders(),
+                HttpStatus.UNSUPPORTED_MEDIA_TYPE,
+                request);
+    }
+
+    @ExceptionHandler(value = SpringBootStorageException.class)
     protected ResponseEntity<Object> handleConflict(
             SpringBootStorageException ex, WebRequest request) {
         String bodyOfResponse = ex.getMessage();
