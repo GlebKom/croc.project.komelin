@@ -21,7 +21,7 @@ public class LinkServiceImpl implements LinkService{
 
     private final RateLimitService rateLimitService;
 
-    public LinkServiceImpl(UniqueNumberDao uniqueNumberDao, HashServiceImpl hashService, LinkRepository linkRepository, RateLimitService rateLimitService) {
+    public LinkServiceImpl(UniqueNumberDao uniqueNumberDao, HashService hashService, LinkRepository linkRepository, RateLimitService rateLimitService) {
         this.uniqueNumberDao = uniqueNumberDao;
         this.hashService = hashService;
         this.linkRepository = linkRepository;
@@ -38,10 +38,6 @@ public class LinkServiceImpl implements LinkService{
 
         if (!rateLimitService.isAccessGained(link)) {
             throw new RequestPerSecondExceededException("Too many requests");
-        }
-
-        if (link.getLifetime().isBefore(LocalDateTime.now())) {
-            throw new DownloadDateExceededException("This link '" + link.getLinkAddress() + "' is already exceeded");
         }
 
         if (link.getDownloadLimit() > 0) {

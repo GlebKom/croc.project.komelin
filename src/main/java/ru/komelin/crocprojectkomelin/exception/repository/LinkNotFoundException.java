@@ -1,6 +1,6 @@
 package ru.komelin.crocprojectkomelin.exception.repository;
 
-public class LinkNotFoundException extends Exception{
+public class LinkNotFoundException extends RuntimeException{
     private final String link;
 
     public LinkNotFoundException(String link) {

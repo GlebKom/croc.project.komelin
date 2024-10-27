@@ -7,6 +7,7 @@ import jakarta.validation.constraints.NotNull;
 
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.Objects;
 
 @Entity
 @Table(name = "link")
@@ -90,5 +91,18 @@ public class Link {
 
     public void setRequestPerSecond(int requestPerSecond) {
         this.requestPerSecond = requestPerSecond;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Link link = (Link) o;
+        return id == link.id && downloadLimit == link.downloadLimit && requestPerSecond == link.requestPerSecond && Objects.equals(linkAddress, link.linkAddress) && Objects.equals(lifetime, link.lifetime) && Objects.equals(photos, link.photos);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(id, linkAddress, downloadLimit, lifetime, requestPerSecond, photos);
     }
 }

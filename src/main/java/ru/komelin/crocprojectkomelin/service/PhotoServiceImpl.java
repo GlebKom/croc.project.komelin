@@ -17,7 +17,7 @@ public class PhotoServiceImpl implements PhotoService{
 
     @Autowired
     public PhotoServiceImpl(PhotoRepository photoRepository,
-                            HashServiceImpl hashService,
+                            HashService hashService,
                             UniqueNumberDao uniqueNumberDao) {
         this.photoRepository = photoRepository;
         this.hashService = hashService;

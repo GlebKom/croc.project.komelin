@@ -4,6 +4,8 @@ import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
 import org.hibernate.annotations.Cascade;
 
+import java.util.Objects;
+
 @Entity
 @Table(name = "photo")
 public class Photo {
@@ -52,5 +54,18 @@ public class Photo {
 
     public void setLink(Link link) {
         this.link = link;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Photo photo = (Photo) o;
+        return id == photo.id && Objects.equals(name, photo.name) && Objects.equals(link, photo.link);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(id, name, link);
     }
 }
