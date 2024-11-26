@@ -43,7 +43,6 @@ public class PhotoController {
         this.linkService = linkService;
         this.rateLimitService = rateLimitService;
     }
-
     @PostMapping()
     public ResponseEntity<?> uploadFiles(@RequestParam("files") MultipartFile[] multipartFiles,
                                          @RequestParam("download_limit") int downloadLimit,
